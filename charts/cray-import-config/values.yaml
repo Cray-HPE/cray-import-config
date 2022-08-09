@@ -33,7 +33,7 @@ config_image:
 catalog:
   image:
     repository: artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update
-    tag: 1.5.2
+    tag: 1.6.0
     pullPolicy: IfNotPresent
 
   config_map: cray-product-catalog
