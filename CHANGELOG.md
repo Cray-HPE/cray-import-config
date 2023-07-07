@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Update license text to comply with automatic license-check tool.
 - Reverted github workflows to Jenkins pipelines.
+- Parameterized `jobName`
+- Added lowercase conversion for `import_job.CF_IMPORT_PRODUCT_NAME` and `import_job.CF_IMPORT_PRODUCT_VERSION`
+  values, and made them required.
 
 ## [3.0.3] - 2022-03-11
 
