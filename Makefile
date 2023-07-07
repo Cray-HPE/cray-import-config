@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -21,25 +21,36 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Lint, test, and scan Helm charts
-on:
-  pull_request:
-    branches:
-      - master
-      - develop
-      - release/**
-  # schedule:
-  #   - cron: "0 0 * * *"
-  workflow_dispatch:
-jobs:
-  lint-test-scan:
-    uses: Cray-HPE/.github/.github/workflows/charts-lint-test-scan.yml@main
-    with:
-      lint-charts: ${{ github.event_name == 'pull_request' }}
-      scan-images: false
-      scan-charts: false
-    secrets:
-      snyk-token: ${{ secrets.SNYK_TOKEN }}
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      artifactory-username: ${{ secrets.ARTIFACTORY_ALGOL60_READONLY_USERNAME }}
-      artifactory-password: ${{ secrets.ARTIFACTORY_ALGOL60_READONLY_TOKEN }}
+
+# If you wish to perform a local build, you will need to clone or copy the contents of the
+# cms-meta-tools repo to ./cms_meta_tools
+
+CHART_PATH ?= charts
+
+IMPORT_CONFIG_CHART_NAME ?= "cray-import-config"
+
+IMPORT_CONFIG_CHART_VERSION ?= local
+
+HELM_UNITTEST_IMAGE ?= quintush/helm-unittest:3.3.0-0.2.5
+
+all: runbuildprep lint chart_setup test package
+
+test: import_config_test
+package: import_config_package
+
+runbuildprep:
+		./cms_meta_tools/scripts/runBuildPrep.sh
+
+lint:
+		./cms_meta_tools/scripts/runLint.sh
+
+chart_setup:
+		mkdir -p ${CHART_PATH}/.packaged
+
+import_config_test:
+		helm lint "${CHART_PATH}/${IMPORT_CONFIG_CHART_NAME}"
+		docker run --rm -v ${PWD}/${CHART_PATH}:/apps ${HELM_UNITTEST_IMAGE} -3 ${IMPORT_CONFIG_CHART_NAME}
+
+import_config_package:
+		helm dep up ${CHART_PATH}/${IMPORT_CONFIG_CHART_NAME}
+		helm package ${CHART_PATH}/${IMPORT_CONFIG_CHART_NAME} -d ${CHART_PATH}/.packaged --version ${IMPORT_CONFIG_CHART_VERSION}
