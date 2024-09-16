@@ -37,5 +37,5 @@ maintainers:
 annotations:
   artifacthub.io/images: |
     - name: cray-product-catalog-update
-      image: artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:1.5.2
+      image: artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:0.0.0-cpc
   artifacthub.io/license: MIT

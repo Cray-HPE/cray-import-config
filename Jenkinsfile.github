@@ -43,6 +43,8 @@ pipeline {
 
     options {
         buildDiscarder(logRotator(numToKeepStr: "10"))
+        disableConcurrentBuilds()
+        timeout(time: 90, unit: 'MINUTES')
         timestamps()
     }
 
@@ -61,13 +63,19 @@ pipeline {
                 cloneCMSMetaTools()
             }
         }
-
-        stage("runBuildPrep") {
+        stage("Set Versions") {
             steps {
-                sh "make runbuildprep"
+                // This function is defined in cms-meta-tools:vars/setVersionFiles.groovy
+                setVersionFiles()
             }
         }
-
+        stage("runBuildPrep") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'artifactory-algol60-readonly', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USERNAME')]) {
+                    sh "make runbuildprep"
+                }
+            }
+        }
         stage("Lint") {
             steps {
                 sh "make lint"
