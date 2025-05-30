@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added lowercase conversion for `import_job.CF_IMPORT_PRODUCT_NAME` and `import_job.CF_IMPORT_PRODUCT_VERSION`
   values, and made them required.
 
+### Dependencies
+
+- Bump `dangoslen/dependabot-changelog-helper` from 3 to 4 ([#26](https://github.com/Cray-HPE/cray-import-config/pull/26))
+
 ## [3.0.3] - 2022-03-11
 
 ### Added
