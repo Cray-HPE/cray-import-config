@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,7 +20,7 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-
+#
 apiVersion: v2
 name: cray-import-config
 version: 0.0.0-DEV  # Replaced during build
@@ -37,5 +37,5 @@ maintainers:
 annotations:
   artifacthub.io/images: |
     - name: cray-product-catalog-update
-      image: artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:1.5.2
+      image: artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:0.0.0-cpc
   artifacthub.io/license: MIT

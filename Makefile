@@ -21,8 +21,36 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-chart-dirs:
-  - charts
-chart-repos:
-  - csm-algol60=https://artifactory.algol60.net/artifactory/csm-helm-charts/
-all: true
+
+# If you wish to perform a local build, you will need to clone or copy the contents of the
+# cms-meta-tools repo to ./cms_meta_tools
+
+CHART_PATH ?= charts
+
+IMPORT_CONFIG_CHART_NAME ?= "cray-import-config"
+
+IMPORT_CONFIG_CHART_VERSION ?= local
+
+HELM_UNITTEST_IMAGE ?= quintush/helm-unittest:3.3.0-0.2.5
+
+all: runbuildprep lint chart_setup test package
+
+test: import_config_test
+package: import_config_package
+
+runbuildprep:
+		./cms_meta_tools/scripts/runBuildPrep.sh
+
+lint:
+		./cms_meta_tools/scripts/runLint.sh
+
+chart_setup:
+		mkdir -p ${CHART_PATH}/.packaged
+
+import_config_test:
+		helm lint "${CHART_PATH}/${IMPORT_CONFIG_CHART_NAME}"
+		docker run --rm -v ${PWD}/${CHART_PATH}:/apps ${HELM_UNITTEST_IMAGE} -3 ${IMPORT_CONFIG_CHART_NAME}
+
+import_config_package:
+		helm dep up ${CHART_PATH}/${IMPORT_CONFIG_CHART_NAME}
+		helm package ${CHART_PATH}/${IMPORT_CONFIG_CHART_NAME} -d ${CHART_PATH}/.packaged --version ${IMPORT_CONFIG_CHART_VERSION}
