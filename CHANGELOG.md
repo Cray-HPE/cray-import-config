@@ -5,11 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
 - Update license text to comply with automatic license-check tool.
 - Reverted github workflows to Jenkins pipelines.
 - Parameterized `jobName`
 - Added lowercase conversion for `import_job.CF_IMPORT_PRODUCT_NAME` and `import_job.CF_IMPORT_PRODUCT_VERSION`
   values, and made them required.
+- CASMCMS-9132 - update cray-product-catalog version, convert to using 'update_versions' scripts.
 
 ### Dependencies
 - Bump `dangoslen/dependabot-changelog-helper` from 3 to 4 ([#26](https://github.com/Cray-HPE/cray-import-config/pull/26))
